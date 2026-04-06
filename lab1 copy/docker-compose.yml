@@ -1,0 +1,25 @@
+services:
+  # Сервіс бази даних (справжня БД за вимогами ЛР2)
+  db:
+    image: postgres:15-alpine
+    container_name: task_db
+    environment:
+      - POSTGRES_DB=task_manager
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+    ports:
+      - "5432:5432"
+
+  # Твій додаток
+  app:
+    build: .
+    container_name: spring_lab2
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/task_manager
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=pass
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - db
