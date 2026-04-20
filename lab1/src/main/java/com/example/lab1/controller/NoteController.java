@@ -19,7 +19,6 @@ public class NoteController {
         this.repository = repository;
     }
 
-    // 1. Получить все заметки (HTML-таблица или JSON)
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE})
     public ResponseEntity<?> getAll(@RequestHeader(value = "Accept", defaultValue = "application/json") String accept) {
         List<Note> notes = repository.findAll();
@@ -45,18 +44,15 @@ public class NoteController {
             return ResponseEntity.ok().contentType(MediaType.TEXT_HTML).body(html.toString());
         }
 
-        // По умолчанию отдаем JSON
         return ResponseEntity.ok(notes);
     }
 
-    // 2. Создать заметку (принимает только JSON)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Note> create(@RequestBody Note note) {
         Note savedNote = repository.save(note);
         return new ResponseEntity<>(savedNote, HttpStatus.CREATED);
     }
 
-    // 3. Получить конкретную заметку по ID (HTML или JSON)
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE})
     public ResponseEntity<?> getById(@PathVariable Long id, @RequestHeader(value = "Accept", defaultValue = "application/json") String accept) {
         Note note = repository.findById(id).orElse(null);
@@ -80,7 +76,6 @@ public class NoteController {
         return ResponseEntity.ok(note);
     }
 
-    // 4. Удалить заметку
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         repository.deleteById(id);

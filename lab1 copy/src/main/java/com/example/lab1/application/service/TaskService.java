@@ -24,7 +24,6 @@ public class TaskService {
         return repository.findAll();
     }
 
-    // ДОДАЙ ЦЕЙ МЕТОД:
     public void deleteTask(Long id) {
         repository.deleteById(id);
     }
